@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Car")
+@RequestMapping("/car")
 public class CarController {
 
-    @Autowired
-    public final CarRepo carRepo;
+    private final CarRepo carRepo;
 
+    @Autowired
     public CarController(CarRepo carRepo) {
         this.carRepo = carRepo;
     }
