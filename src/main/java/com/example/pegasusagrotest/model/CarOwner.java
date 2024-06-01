@@ -2,7 +2,7 @@ package com.example.pegasusagrotest.model;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "CarOwner")
@@ -15,17 +15,18 @@ public class CarOwner {
     private int telephone;
     private String email;
 
-    @OneToMany(mappedBy = "carOwner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Car> carsInPossession;
+    @OneToMany
+    @JoinColumn(name = "Car_id")
+    private List<Car> carsInUse;
 
     public CarOwner() {
     }
 
-    public CarOwner(String fullName, int telephone, String email, Set<Car> carsInPossession) {
+    public CarOwner(String fullName, int telephone, String email, List<Car> carsInUse) {
         this.fullName = fullName;
         this.telephone = telephone;
         this.email = email;
-        this.carsInPossession = carsInPossession;
+        this.carsInUse = carsInUse;
     }
 
     public long getId() {
@@ -60,11 +61,11 @@ public class CarOwner {
         this.email = email;
     }
 
-    public Set<Car> getCarsInPossession() {
-        return carsInPossession;
+    public List<Car> getCarsInUse() {
+        return carsInUse;
     }
 
-    public void setCarsInPossession(Set<Car> carsInPossession) {
-        this.carsInPossession = carsInPossession;
+    public void setCarsInUse(List<Car> carsInUse) {
+        this.carsInUse = carsInUse;
     }
 }

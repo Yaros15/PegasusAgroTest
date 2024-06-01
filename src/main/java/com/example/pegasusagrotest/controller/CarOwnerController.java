@@ -1,7 +1,10 @@
 package com.example.pegasusagrotest.controller;
 
+import com.example.pegasusagrotest.dto.CarOwnerDTO;
+import com.example.pegasusagrotest.model.Car;
 import com.example.pegasusagrotest.model.CarOwner;
 import com.example.pegasusagrotest.repository.CarOwnerRepo;
+import com.example.pegasusagrotest.repository.CarRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +15,12 @@ import java.util.List;
 public class CarOwnerController {
 
     private final CarOwnerRepo carOwnerRepo;
+    private final CarRepo carRepo;
 
     @Autowired
-    public CarOwnerController(CarOwnerRepo carOwnerRepo){
+    public CarOwnerController(CarOwnerRepo carOwnerRepo, CarRepo carRepo){
         this.carOwnerRepo = carOwnerRepo;
+        this.carRepo = carRepo;
     }
 
     @GetMapping
@@ -29,13 +34,35 @@ public class CarOwnerController {
         return currentOwner;
     }
 
+    public CarOwner convertDTOInModelCarOwner(CarOwnerDTO carOwnerDTO){
+        CarOwner carOwner = new CarOwner();
+        carOwner.setFullName(carOwnerDTO.getFullName());
+        carOwner.setTelephone(carOwnerDTO.getTelephone());
+        carOwner.setEmail(carOwnerDTO.getEmail());
+        carOwner.setCarsInUse(carRepo.findAllById(carOwnerDTO.getCarId()));
+        return carOwner;
+    }
+
+    public void convertDTOInModelCar(CarOwnerDTO carOwnerDTO, CarOwner carOwner){
+        for (Long oneCarId : carOwnerDTO.getCarId()){
+            Car currentCar = carRepo.findById(oneCarId).orElse(null);
+            if(currentCar != null){
+                currentCar.setCarOwner(carOwner.getFullName());
+                carRepo.save(currentCar);
+            }
+        }
+    }
+
     @PostMapping
-    public CarOwner createCarOwner(@RequestBody CarOwner carOwner){
-        return carOwnerRepo.save(carOwner);
+    public CarOwner createCarOwner(@RequestBody CarOwnerDTO carOwnerDTO){
+        CarOwner currentCarOwner = carOwnerRepo.save(convertDTOInModelCarOwner(carOwnerDTO));
+        convertDTOInModelCar(carOwnerDTO, currentCarOwner);
+        return currentCarOwner;
     }
 
     @PutMapping("{id}")
-    public CarOwner updateCarOwner(@PathVariable("id") Long ownerId, @RequestBody CarOwner carOwner){
+    public CarOwner updateCarOwner(@PathVariable("id") Long ownerId, @RequestBody CarOwnerDTO carOwnerDTO){
+        CarOwner carOwner = convertDTOInModelCarOwner(carOwnerDTO);
         carOwner.setId(ownerId);
         return carOwnerRepo.save(carOwner);
     }

@@ -1,6 +1,7 @@
 package com.example.pegasusagrotest.controller;
 
 import com.example.pegasusagrotest.model.Car;
+import com.example.pegasusagrotest.repository.CarOwnerRepo;
 import com.example.pegasusagrotest.repository.CarRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,20 @@ public class CarController {
         Car currentCar = carRepo.findById(carId).orElse(null);
         return currentCar;
     }
-
+/*
+    public Car convertDTOInModelCar (CarDTO carDTO){
+        CarOwner carOwner = carOwnerRepo.findById(carDTO.getCarOwnerId()).orElse(null);
+        Car car = new Car();
+        if(carOwner != null) {
+            car.setCarOwnerFullName(carOwner.getFullName());
+        }else{
+            car.setCarOwnerFullName("Диллер");
+        }
+        car.setNumberCar(carDTO.getNumberCar());
+        car.setBuildDate(carDTO.getBuildDate());
+        return car;
+    }
+*/
     @PostMapping
     public Car createCar(@RequestBody Car car){
         return carRepo.save(car);

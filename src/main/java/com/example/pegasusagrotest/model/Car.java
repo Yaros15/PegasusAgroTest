@@ -1,5 +1,6 @@
 package com.example.pegasusagrotest.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -14,17 +15,17 @@ public class Car {
     private String numberCar;
     private Date buildDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CarOwner_id")
-    private CarOwner carOwner;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "carOwner_id")
+    private String carOwnerFullName;
 
     public Car() {
     }
 
-    public Car(String numberCar, Date buildDate, CarOwner carOwner) {
+    public Car(String numberCar, Date buildDate, String carOwnerFullName) {
         this.numberCar = numberCar;
         this.buildDate = buildDate;
-        this.carOwner = carOwner;
+        this.carOwnerFullName = carOwnerFullName;
     }
 
     public long getId() {
@@ -51,11 +52,11 @@ public class Car {
         this.buildDate = buildDate;
     }
 
-    public CarOwner getCarOwner() {
-        return carOwner;
+    public String getCarOwner() {
+        return carOwnerFullName;
     }
 
-    public void setCarOwner(CarOwner carOwner) {
-        this.carOwner = carOwner;
+    public void setCarOwner(String carOwnerFullName) {
+        this.carOwnerFullName = carOwnerFullName;
     }
 }
