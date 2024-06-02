@@ -1,7 +1,6 @@
 package com.example.pegasusagrotest.controller;
 
 import com.example.pegasusagrotest.model.Car;
-import com.example.pegasusagrotest.repository.CarOwnerRepo;
 import com.example.pegasusagrotest.repository.CarRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

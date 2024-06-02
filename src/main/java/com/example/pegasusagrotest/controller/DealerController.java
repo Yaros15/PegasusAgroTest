@@ -1,6 +1,8 @@
 package com.example.pegasusagrotest.controller;
 
+import com.example.pegasusagrotest.dto.DealerDTO;
 import com.example.pegasusagrotest.model.Dealer;
+import com.example.pegasusagrotest.repository.CarOwnerRepo;
 import com.example.pegasusagrotest.repository.DealerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +14,13 @@ import java.util.List;
 public class DealerController{
 
     private final DealerRepo dealerRepo;
+    private final CarOwnerRepo carOwnerRepo;
 
     @Autowired
 
-    public DealerController(DealerRepo dealerRepo) {
+    public DealerController(DealerRepo dealerRepo, CarOwnerRepo carOwnerRepo) {
         this.dealerRepo = dealerRepo;
+        this.carOwnerRepo = carOwnerRepo;
     }
 
     @GetMapping
@@ -30,13 +34,23 @@ public class DealerController{
         return currentDealer;
     }
 
+    public Dealer convertDTOInModelDealer(DealerDTO dealerDTO){
+        Dealer dealer = new Dealer();
+        dealer.setNameOrganization(dealerDTO.getNameOrganization());
+        dealer.setEmail(dealerDTO.getEmail());
+        dealer.setRepresentativeFullName(dealerDTO.getRepresentativeFullName());
+        dealer.setServesCarOwners(carOwnerRepo.findAllById(dealerDTO.getCarOwnersId()));
+        return dealer;
+    }
+
     @PostMapping
-    public Dealer createDealer(@RequestBody Dealer dealer){
-        return dealerRepo.save(dealer);
+    public Dealer createDealer(@RequestBody DealerDTO dealerDTO){
+        return dealerRepo.save(convertDTOInModelDealer(dealerDTO));
     }
 
     @PutMapping("{id}")
-    public Dealer updateDealer(@PathVariable("id") Long dealerId, @RequestBody Dealer dealer){
+    public Dealer updateDealer(@PathVariable("id") Long dealerId, @RequestBody DealerDTO dealerDTO){
+        Dealer dealer = convertDTOInModelDealer(dealerDTO);
         dealer.setId(dealerId);
         return dealerRepo.save(dealer);
     }

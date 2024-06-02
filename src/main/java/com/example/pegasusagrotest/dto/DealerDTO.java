@@ -1,41 +1,19 @@
-package com.example.pegasusagrotest.model;
-
-import jakarta.persistence.*;
+package com.example.pegasusagrotest.dto;
 
 import java.util.List;
-import java.util.Set;
 
-@Entity
-@Table(name = "Dealer")
-public class Dealer {
+public class DealerDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     private String nameOrganization;
     private String email;
     private String representativeFullName;
+    private List<Long> carOwnersId;
 
-    @OneToMany
-    @JoinColumn(name = "CarOwner_id")
-    private List<CarOwner> servesCarOwners;
-
-    public Dealer() {
-    }
-
-    public Dealer(String nameOrganization, String email, String representativeFullName, List<CarOwner> servesCarOwners) {
+    public DealerDTO(String nameOrganization, String email, String representativeFullName, List<Long> carOwnersId) {
         this.nameOrganization = nameOrganization;
         this.email = email;
         this.representativeFullName = representativeFullName;
-        this.servesCarOwners = servesCarOwners;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.carOwnersId = carOwnersId;
     }
 
     public String getNameOrganization() {
@@ -62,11 +40,11 @@ public class Dealer {
         this.representativeFullName = representativeFullName;
     }
 
-    public List<CarOwner> getServesCarOwners() {
-        return servesCarOwners;
+    public List<Long> getCarOwnersId() {
+        return carOwnersId;
     }
 
-    public void setServesCarOwners(List<CarOwner> servesCarOwners) {
-        this.servesCarOwners = servesCarOwners;
+    public void setCarOwnersId(List<Long> carOwnersId) {
+        this.carOwnersId = carOwnersId;
     }
 }

@@ -64,6 +64,7 @@ public class CarOwnerController {
     public CarOwner updateCarOwner(@PathVariable("id") Long ownerId, @RequestBody CarOwnerDTO carOwnerDTO){
         CarOwner carOwner = convertDTOInModelCarOwner(carOwnerDTO);
         carOwner.setId(ownerId);
+        convertDTOInModelCar(carOwnerDTO, carOwner);
         return carOwnerRepo.save(carOwner);
     }
 
