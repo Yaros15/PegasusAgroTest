@@ -66,13 +66,8 @@ public class DealerController{
                                            @PathVariable("carOwnerId") Long carOwnerId){
         Dealer dealer = dealerRepo.findById(dealerId).orElse(null);
         if(dealer != null){
-            List<CarOwner> carOwnerList = dealer.getServesCarOwners();
-            for(CarOwner carOwner : carOwnerList){
-                if(carOwner.getId() == carOwnerId){
-                    dealer.getServesCarOwners().remove(carOwner);
-                    dealerRepo.save(dealer);
-                }
-            }
+            dealer.getServesCarOwners().removeIf(carOwner -> carOwner.getId()==carOwnerId);
+            dealerRepo.save(dealer);
         }
         return dealer;
     }
