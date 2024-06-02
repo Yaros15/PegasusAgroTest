@@ -73,4 +73,21 @@ public class CarOwnerController {
         carOwnerRepo.deleteById(ownerId);
     }
 
+
+    @PutMapping("{carOwnerId}/remove/{carId}")
+    public CarOwner removeCarFromCarOwner(@PathVariable("carOwnerId") Long carOwnerId,
+                                            @PathVariable("carId") Long carId){
+        CarOwner carOwner = carOwnerRepo.findById(carOwnerId).orElse(null);
+        if(carOwner != null){
+            List<Car> carList = carOwner.getCarsInUse();
+            for(Car car : carList){
+                if(car.getId() == carId){
+                    carOwner.getCarsInUse().remove(car);
+                    carOwnerRepo.save(carOwner);
+                }
+            }
+        }
+        return carOwner;
+    }
+
 }

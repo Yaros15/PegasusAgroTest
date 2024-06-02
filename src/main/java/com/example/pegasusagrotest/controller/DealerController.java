@@ -1,6 +1,7 @@
 package com.example.pegasusagrotest.controller;
 
 import com.example.pegasusagrotest.dto.DealerDTO;
+import com.example.pegasusagrotest.model.CarOwner;
 import com.example.pegasusagrotest.model.Dealer;
 import com.example.pegasusagrotest.repository.CarOwnerRepo;
 import com.example.pegasusagrotest.repository.DealerRepo;
@@ -60,5 +61,20 @@ public class DealerController{
         dealerRepo.deleteById(dealerId);
     }
 
+    @PutMapping("{dealerId}/remove/{carOwnerId}")
+    public Dealer removeCarOwnerFromDealer(@PathVariable("dealerId") Long dealerId,
+                                           @PathVariable("carOwnerId") Long carOwnerId){
+        Dealer dealer = dealerRepo.findById(dealerId).orElse(null);
+        if(dealer != null){
+            List<CarOwner> carOwnerList = dealer.getServesCarOwners();
+            for(CarOwner carOwner : carOwnerList){
+                if(carOwner.getId() == carOwnerId){
+                    dealer.getServesCarOwners().remove(carOwner);
+                    dealerRepo.save(dealer);
+                }
+            }
+        }
+        return dealer;
+    }
 
 }
