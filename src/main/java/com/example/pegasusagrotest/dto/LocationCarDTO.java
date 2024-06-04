@@ -37,6 +37,14 @@ public class LocationCarDTO {
         this.currentDegreesLon = currentDegreesLon;
     }
 
+    public void setCurrentDegreesLat(double currentDegreesLat) {
+        this.currentDegreesLat = currentDegreesLat;
+    }
+
+    public void setCurrentDegreesLon(double currentDegreesLon) {
+        this.currentDegreesLon = currentDegreesLon;
+    }
+
     public void setLastDegreesLat(double lastDegreesLat) {
         this.lastDegreesLat = lastDegreesLat;
     }

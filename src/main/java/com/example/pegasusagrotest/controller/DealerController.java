@@ -6,6 +6,7 @@ import com.example.pegasusagrotest.model.Dealer;
 import com.example.pegasusagrotest.repository.CarOwnerRepo;
 import com.example.pegasusagrotest.repository.DealerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,8 +58,13 @@ public class DealerController{
     }
 
     @DeleteMapping("{id}")
-    public void deleteDealer(@PathVariable("id") Long dealerId){
+    public ResponseEntity<String> deleteDealer(@PathVariable("id") Long dealerId){
+        Dealer dealer = dealerRepo.findById(dealerId).orElse(null);
+        if(dealer == null){
+            return ResponseEntity.badRequest().body(String.format("Дилера с номером ид: %d - нет в базе данных", dealerId));
+        }
         dealerRepo.deleteById(dealerId);
+        return ResponseEntity.ok("Дилер удален");
     }
 
     @PutMapping("{dealerId}/remove/{carOwnerId}")

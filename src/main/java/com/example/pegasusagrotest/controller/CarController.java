@@ -3,6 +3,7 @@ package com.example.pegasusagrotest.controller;
 import com.example.pegasusagrotest.model.Car;
 import com.example.pegasusagrotest.repository.CarRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,8 +55,13 @@ public class CarController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteCar(@PathVariable("id") Long carId){
+    public ResponseEntity<String> deleteCar(@PathVariable("id") Long carId){
+        Car car = carRepo.findById(carId).orElse(null);
+        if(car == null){
+            return ResponseEntity.badRequest().body(String.format("Машины с номером ид: %d - нет в базе данных", carId));
+        }
         carRepo.deleteById(carId);
+        return ResponseEntity.ok("Машина удалена");
     }
 
 }

@@ -2,8 +2,6 @@ package com.example.pegasusagrotest.service;
 
 import com.example.pegasusagrotest.dto.LocationCarDTO;
 
-import java.text.DecimalFormat;
-
 public class NMEA0183ProtocolFileService {
 
     private static final String GPS_SATELLITE = "$GPGGA";
@@ -16,12 +14,10 @@ public class NMEA0183ProtocolFileService {
     private static final int EARTH_RADIUS = 6371;
 
     private LocationCarDTO locationCar;
-    private DecimalFormat decimalFormat;
     private double pathTraveled;
 
     public NMEA0183ProtocolFileService() {
         locationCar = new LocationCarDTO();
-        decimalFormat = new DecimalFormat("#,###");
     }
 
     public void connectRouteUsingCoordinatesFromFile(String line){
@@ -41,16 +37,13 @@ public class NMEA0183ProtocolFileService {
                             locationCar.getLastDegreesLon(), locationCar.getCurrentDegreesLat(),
                             locationCar.getCurrentDegreesLon());
 
-            System.out.println("DegreesLat " + locationCar.getCurrentDegreesLat() + " "
-                    + "DegreesLon " + locationCar.getCurrentDegreesLon() + " "
-                    + "LastDegreesLat " + locationCar.getLastDegreesLat() + " "
-                    + "LastDegreesLon " + locationCar.getLastDegreesLon());
-
         } else if(currentLine[ID_SUBSTRING_SATELLITE].contains(GROUND_SPEED)){
             double speed = Double.parseDouble(currentLine[ID_SUBSTRING_SPEED]);
             if(speed != 0){
                 locationCar.setTotalDistanceTraveled(pathTraveled);
-                System.out.println(pathTraveled + " Total " + locationCar.getTotalDistanceTraveled());
+            }else{
+                locationCar.setCurrentDegreesLat(locationCar.getLastDegreesLat());
+                locationCar.setCurrentDegreesLon(locationCar.getLastDegreesLon());
             }
         }
     }
