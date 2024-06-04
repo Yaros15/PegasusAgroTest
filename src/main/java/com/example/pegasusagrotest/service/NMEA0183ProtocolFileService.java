@@ -37,9 +37,9 @@ public class NMEA0183ProtocolFileService {
                 locationCar.setLastDegreesLon(locationCar.getCurrentDegreesLon());
             }
 
-            pathTraveled = Double.valueOf(decimalFormat.format(calculateDistance(locationCar.getLastDegreesLat(),
+            pathTraveled = calculateDistance(locationCar.getLastDegreesLat(),
                             locationCar.getLastDegreesLon(), locationCar.getCurrentDegreesLat(),
-                            locationCar.getCurrentDegreesLon())));
+                            locationCar.getCurrentDegreesLon());
 
             System.out.println("DegreesLat " + locationCar.getCurrentDegreesLat() + " "
                     + "DegreesLon " + locationCar.getCurrentDegreesLon() + " "
