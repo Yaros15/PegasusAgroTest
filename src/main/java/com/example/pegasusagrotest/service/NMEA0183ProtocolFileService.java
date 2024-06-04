@@ -23,7 +23,8 @@ public class NMEA0183ProtocolFileService {
     public void connectRouteUsingCoordinatesFromFile(String line){
 
         String[] currentLine = line.split(COMMA_SEPARATOR);
-        if(currentLine[ID_SUBSTRING_SATELLITE].equals(GPS_SATELLITE)) {
+
+        if(currentLine[ID_SUBSTRING_SATELLITE].equals(GPS_SATELLITE) && !currentLine[ID_SUBSTRING_LAT].isEmpty()) {
 
             locationCar.setCurrentDegreesLat(currentLine[ID_SUBSTRING_LAT]);
             locationCar.setCurrentDegreesLon(currentLine[ID_SUBSTRING_LON]);
@@ -37,8 +38,15 @@ public class NMEA0183ProtocolFileService {
                             locationCar.getLastDegreesLon(), locationCar.getCurrentDegreesLat(),
                             locationCar.getCurrentDegreesLon());
 
-        } else if(currentLine[ID_SUBSTRING_SATELLITE].contains(GROUND_SPEED)){
-            double speed = Double.parseDouble(currentLine[ID_SUBSTRING_SPEED]);
+        } else if(currentLine[ID_SUBSTRING_SATELLITE].contains(GROUND_SPEED) && (currentLine.length > 9)) {
+            double speed = 0;
+
+            try {
+                speed = Double.parseDouble(currentLine[ID_SUBSTRING_SPEED]);
+            }catch (NumberFormatException e){
+                speed = 0;
+            }
+
             if(speed != 0){
                 locationCar.setTotalDistanceTraveled(pathTraveled);
             }else{
