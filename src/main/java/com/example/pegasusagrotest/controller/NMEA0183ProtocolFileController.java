@@ -1,5 +1,6 @@
 package com.example.pegasusagrotest.controller;
 
+import com.example.pegasusagrotest.service.NMEA0183ProtocolFileService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -12,20 +13,21 @@ import java.io.InputStreamReader;
 
 @RestController
 @RequestMapping("/files")
-public class FileController {
+public class NMEA0183ProtocolFileController {
 
     @PostMapping
-    public int uploadFile(@RequestPart MultipartFile file){
-        int numLinesInFile = 0;
+    public double uploadFile(@RequestPart MultipartFile file){
+        NMEA0183ProtocolFileService fileService = new NMEA0183ProtocolFileService();
+
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))){
-            //reader.lines();
-            while (reader.readLine() != null){
-                numLinesInFile++;
+            String line;
+            while ((line = reader.readLine()) != null){
+                fileService.connectRouteUsingCoordinatesFromFile(line);
             }
         }catch (IOException e){
             e.printStackTrace();
         }
-        return numLinesInFile;
+        return fileService.carHasPassedWay();
     }
 
 }
